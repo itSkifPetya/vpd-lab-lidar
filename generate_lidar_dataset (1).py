@@ -9,14 +9,14 @@ class LiDAR2DSimulator:
         self.min_range = 60    # мм
         self.angle_resolution = 0.36  # градусы
         self.scan_angle = 240  # градусы
-        self.num_points = int(self.scan_angle / self.angle_resolution)
+        self.num_points = 667
         
     def create_simple_room(self, robot_x=0, robot_y=0, robot_theta=0):
         """Создает простую прямоугольную комнату 8x6 метров"""
         points = []
         
         for i in range(self.num_points):
-            angle_deg = -120 + i * self.angle_resolution  # от -120° до +120°
+            angle_deg = self.scan_angle/2 + i * (self.scan_angle / (self.num_points-1))  # от -120° до +120°
             angle_rad = math.radians(angle_deg + robot_theta)
             
             # Луч от робота
@@ -137,67 +137,69 @@ class LiDAR2DSimulator:
             points.append([angle_deg, distance])      
         return points
 
-def generate_movement_sequence():
-    """Генерирует последовательность движений робота"""
-    simulator = LiDAR2DSimulator()
+# def generate_movement_sequence():
+#     """Генерирует последовательность движений робота"""
+#     simulator = LiDAR2DSimulator()
     
-    # Сценарий 1: Простое движение вперед
-    sequence1 = []
-    for i in range(10):
-        x = i * 0.2  # движение по 20см
-        scan = simulator.create_simple_room(robot_x=x, robot_y=0, robot_theta=0)
-        sequence1.append({
-            'timestamp': i * 0.1,  # каждые 100мс
-            'robot_pose': {'x': x, 'y': 0, 'theta': 0},
-            'scan': scan
-        })
+#     # Сценарий 1: Простое движение вперед
+#     sequence1 = []
+#     for i in range(10):
+#         x = i * 0.2  # движение по 20см
+#         scan = simulator.create_simple_room(robot_x=x, robot_y=0, robot_theta=0)
+#         sequence1.append()
+#         # sequence1.append({
+#         #     'timestamp': i * 0.1,  # каждые 100мс
+#         #     'robot_pose': {'x': x, 'y': 0, 'theta': 0},
+#         #     'scan': scan
+#         # })
     
-    # Сценарий 2: Поворот на месте
-    sequence2 = []
-    for i in range(15):
-        theta = i * 3  # поворот по 3 градуса
-        scan = simulator.create_room_with_obstacles(robot_x=0, robot_y=0, robot_theta=theta)
-        sequence2.append({
-            'timestamp': i * 0.1,
-            'robot_pose': {'x': 0, 'y': 0, 'theta': theta},
-            'scan': scan
-        })
+#     # Сценарий 2: Поворот на месте
+#     sequence2 = []
+#     for i in range(15):
+#         theta = i * 3  # поворот по 3 градуса
+#         scan = simulator.create_room_with_obstacles(robot_x=0, robot_y=0, robot_theta=theta)
+#         sequence2.append({
+#             'timestamp': i * 0.1,
+#             'robot_pose': {'x': 0, 'y': 0, 'theta': theta},
+#             'scan': scan
+#         })
     
-    # Сценарий 3: Сложная траектория (L-образный поворот)
-    sequence3 = []
-    waypoints = [
-        (0, 0, 0), (0.5, 0, 0), (1.0, 0, 0), (1.5, 0, 0),  # вперед
-        (1.5, 0, 15), (1.5, 0, 30), (1.5, 0, 45), (1.5, 0, 60), (1.5, 0, 90),  # поворот
-        (1.5, 0.3, 90), (1.5, 0.6, 90), (1.5, 0.9, 90)  # вперед после поворота
-    ]
+#     # Сценарий 3: Сложная траектория (L-образный поворот)
+#     sequence3 = []
+#     waypoints = [
+#         (0, 0, 0), (0.5, 0, 0), (1.0, 0, 0), (1.5, 0, 0),  # вперед
+#         (1.5, 0, 15), (1.5, 0, 30), (1.5, 0, 45), (1.5, 0, 60), (1.5, 0, 90),  # поворот
+#         (1.5, 0.3, 90), (1.5, 0.6, 90), (1.5, 0.9, 90)  # вперед после поворота
+#     ]
     
-    for i, (x, y, theta) in enumerate(waypoints):
-        scan = simulator.create_room_with_obstacles(robot_x=x, robot_y=y, robot_theta=theta)
-        sequence3.append({
-            'timestamp': i * 0.1,
-            'robot_pose': {'x': x, 'y': y, 'theta': theta},
-            'scan': scan
-        })
+#     for i, (x, y, theta) in enumerate(waypoints):
+#         scan = simulator.create_room_with_obstacles(robot_x=x, robot_y=y, robot_theta=theta)
+#         # se
+#         # sequence3.append({
+#         #     'timestamp': i * 0.1,
+#         #     'robot_pose': {'x': x, 'y': y, 'theta': theta},
+#         #     'scan': scan
+#         # })
     
-    return {
-        'scenario_1_forward_motion': sequence1,
-        'scenario_2_rotation': sequence2,
-        'scenario_3_complex_path': sequence3
-    }
+#     # return {
+#     #     'scenario_1_forward_motion': sequence1,
+#     #     'scenario_2_rotation': sequence2,
+#     #     'scenario_3_complex_path': sequence3
+#     # }
 
 if __name__ == "__main__":
-    print("Генерирую датасет LiDAR...")
+    # print("Генерирую датасет LiDAR...")
     
-    dataset = generate_movement_sequence()
+    # dataset = generate_movement_sequence()
     
-    # Сохраняем в JSON файлы
-    for scenario_name, data in dataset.items():
-        filename = f"data/lidar_data_{scenario_name}.json"
-        with open(filename, 'w') as f:
-            json.dump(data, f, indent=2)
-        print(f"Сохранен {filename} с {len(data)} сканами")
+    # # Сохраняем в JSON файлы
+    # for scenario_name, data in dataset.items():
+    #     filename = f"data/lidar_data_{scenario_name}.json"
+    #     with open(filename, 'w') as f:
+    #         json.dump(data, f, indent=2)
+    #     print(f"Сохранен {filename} с {len(data)} сканами")
     
-    # Создаем также отдельные файлы для быстрого тестирования
+    # # Создаем также отдельные файлы для быстрого тестирования
     sim = LiDAR2DSimulator()
     
     # Один скан из простой комнаты
