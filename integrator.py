@@ -1,6 +1,6 @@
 class Integrator:
-    def _init_(self, x0, T):
-        self.x0 = x0
+    def __init__(self, x0, T):
+        self.x0 = 0
         self.T = T
         self.integral = x0
         self.firstUpdate = True
