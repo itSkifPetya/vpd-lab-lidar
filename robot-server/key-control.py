@@ -1,14 +1,11 @@
-# import time  
-# import termios  
-# import tty  
+# Vpd Lab Lidar Robot-Server
+
 import time
 import threading
 import socket
-# import struct
 import pickle
 from math import pi
 import ev3dev2.motor as motor
-# import sys
 from keycontrol import KeyController
 from odometry import Odometry
 
@@ -18,13 +15,18 @@ PORT = 65432
 L_MOTOR = motor.LargeMotor(motor.OUTPUT_C)
 R_MOTOR = motor.LargeMotor(motor.OUTPUT_B)
 
-WHEEL_RADIUS = 5.6/2 / 100
-BASE = 11.2 / 100
+### Robot configs
+# WHEEL_RADIUS = 5.6/2 / 100
+# BASE = 11.2 / 100
+
+WHEEL_RADIUS = 4.3/2 / 100
+BASE = 15 / 100
+
 T = 0.02
 
 OD = Odometry(WHEEL_RADIUS, BASE, T)
 
-KC = KeyController(L_MOTOR, R_MOTOR, forward_cycle=60, turn_cycle=40)
+KC = KeyController(L_MOTOR, R_MOTOR, forward_cycle=100, turn_cycle=70)
 
 def send_pos(x, y, client_sock: socket.socket):
     pos = pickle.dumps((x, y))
