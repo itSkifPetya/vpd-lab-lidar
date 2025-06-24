@@ -16,39 +16,65 @@ if __name__ == '__main__':
 
     laser = hokuyo.Hokuyo(port)
 
+    laser.reset()
+    laser.laser_off()
 
     laser.laser_on()
 
+    
+    # data = laser.get_single_scan()
+    # x = []
+    # y = []
+    # f = open("scan.csv", "w+")
+    # # print(data.items())
+    # for key, value in data.items():
+    #     # f.write(f"{key},{value}\n")
+    #     ang = key * math.pi/180
+    #     val = value / 1000
+    #     f.write(f"{ang},{val}\n")
+    #     x.append(val*math.cos(ang))
+    #     y.append(val*math.sin(ang))
+
+    # ax.scatter(x, y, s=2)
+    # plt.xlim([-1, 1])
+    # plt.ylim([-1, 1])
+    
     fig = plt.figure(1)
     ax = fig.add_subplot(111)
-    data = laser.get_single_scan()
-    x = []
-    y = []
-    for key, value in data.items():
-        ang = key * math.pi/180
-        val = value / 1000
-        x.append(val*math.cos(ang))
-        y.append(val*math.sin(ang))
-
-    ax.scatter(x, y, s=2)
-    plt.xlim([-4, 4])
-    plt.ylim([-4, 4])
-    plt.grid(True)
-    # plt.show()
-
-    for i in range(100):
+    # for i in range(100):
+    while True:
         data = laser.get_single_scan()
         x = []
         y = []
         for key, value in data.items():
             ang = key * math.pi/180
-            x.append(value*math.cos(ang))
-            y.append(value*math.sin(ang))
+            val = value / 1000
+            x.append(val*math.cos(ang))
+            y.append(val*math.sin(ang))
 
         ax.clear()
-        ax.scatter(x, y, s=2)
+        # ax.scatter(x, y, s=2)
+        # ax.scatter(x, y, s=2)
+        ax.plot(x, y, marker='.', linestyle='', markersize=2)
+        ax.set_xlim([-2, 2])
+        ax.set_ylim([-2, 2])
+        # data = laser.get_single_scan()
+        # x = []
+        # y = []
+        # for key, value in data.items():
+        #     ang = key * math.pi/180
+        #     x.append(value*math.cos(ang))
+        #     y.append(value*math.sin(ang))
 
-        time.sleep(0.01)
+        # ax.clear()
+        # ax.scatter(x, y, s=2)
+
+        # time.sleep(0.01)
+        plt.grid(True)
+        plt.draw()
+        plt.pause(0.01)
+    
+    #     time.sleep(0.01)
     
     print(laser.reset())
     print(laser.laser_off())

@@ -11,23 +11,7 @@ ax = fig.add_subplot(111)
 HOST_ROBOT = "localhost"
 PORT_ROBOT = 65432
 
-pos = []
-
-def receiving(s: socket.socket, RC: Receiver):
-    while True:
-        if RC.receive_pos(): continue
-
-
-# def receive_pos(s: socket.socket):
-#     data = s.recv(4096)
-#     if data == b'': return (True, 0, 0)
-#     (x, y) = pickle.loads(data)
-#     return (False, x, y)
-
-# def receiver(s: socket.socket):
-#     while True:
-#         if receive_pos(s)
-    
+pos = []    
 
 with socket.socket(socket.AF_INET, socket.SOCK_STREAM) as s:
     s.connect((HOST_ROBOT, PORT_ROBOT))

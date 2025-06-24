@@ -1,3 +1,5 @@
+# Класс лидара для упрощения взаимодействия с самим лидаром
+
 import serial
 from numpy import array, cos, sin, pi
 from hokuyo.driver import hokuyo
@@ -8,9 +10,17 @@ class Lidar:
         self.__laser_serial = serial.Serial(port=uart_port, baudrate=uart_speed, timeout=timeout)
         self.__port = serial_port.SerialPort(self.__laser_serial)
         self.__laser = hokuyo.Hokuyo(self.__port)
-        self.__cloud = array()
+        self.__laser.reset()
+        self.__laser.laser_off()
+        self.__laser.laser_on()
+        self.__cloud = array([])
         self.__xy = tuple()
         self.__data = []
+
+    def reset_laser(self):
+        self.__laser.reset()
+        self.__laser.laser_off()
+        self.__laser.laser_on()
 
     def __single_scan(self):
         self.__laser.laser_on()
